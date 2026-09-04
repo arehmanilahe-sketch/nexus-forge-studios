@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus Forge Studios | Indie Game Developer & 3D Artist</title>
+    <meta name="description" content="Official website of Nexus Forge Studios. Crafting cutting-edge 3D interactive experiences and games using Unity Engine and Blender 3D." />
+    <meta name="keywords" content="Nexus Forge Studios, Indie Game Developer, Unity 3D, Blender 3D, Cyber Vanguard, 3D Game Development, A. Rehman" />
+    <meta name="author" content="A. Rehman" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nexusforge-pi.vercel.app/" />
+
+    <!-- Open Graph Social Sharing Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nexus Forge Studios" />
+    <meta property="og:title" content="Nexus Forge Studios | Indie Game Developer & 3D Artist" />
+    <meta property="og:description" content="Official website of Nexus Forge Studios. Crafting cutting-edge 3D interactive experiences and games using Unity Engine and Blender 3D." />
+    <meta property="og:url" content="https://nexusforge-pi.vercel.app/" />
+    <meta property="og:image" content="https://nexusforge-pi.vercel.app/images/hero.jpg" />
+    <meta property="og:image:width" content="1376" />
+    <meta property="og:image:height" content="768" />
+    <meta property="og:image:alt" content="Nexus Forge Studios Game Banner" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nexus Forge Studios | Indie Game Developer & 3D Artist" />
+    <meta name="twitter:description" content="Official website of Nexus Forge Studios. Crafting cutting-edge 3D interactive experiences and games using Unity Engine and Blender 3D." />
+    <meta name="twitter:image" content="https://nexusforge-pi.vercel.app/images/hero.jpg" />
+
+    <!-- Core Web Vitals Optimization (Preload Critical LCP Hero Image) -->
+    <link rel="preload" as="image" href="images/hero.jpg" fetchpriority="high" />
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Website Favicon & Brand Icon -->
+    <link rel="icon" type="image/png" href="images/logo.png" />
+
+    <!-- Schema.org JSON-LD Structured Data for Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Nexus Forge Studios",
+      "url": "https://nexusforge-pi.vercel.app/",
+      "logo": "https://nexusforge-pi.vercel.app/images/logo.png",
+      "description": "Independent game studio crafting cutting-edge 3D interactive experiences using Unity Engine and Blender 3D.",
+      "founder": {
+        "@type": "Person",
+        "name": "A. Rehman",
+        "jobTitle": "Lead Game Developer & 3D Artist"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Nexus Forge Studios",
+      "url": "https://nexusforge-pi.vercel.app/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://nexusforge-pi.vercel.app/games.html?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Supabase Cloud SDK -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="container nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="logo-icon">
+                    <img src="images/logo.png" alt="Nexus Forge Studios Logo" width="70" height="70" />
+                </div>
+                <span>NEXUS<span class="text-gradient">FORGE</span></span>
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="games.html" class="nav-link">Our Games</a>
+                <a href="games.html#ratingsSection" class="nav-link"><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Rate Games</a>
+                <a href="contact.html" class="nav-link">Contact Us</a>
+                <div class="nav-auth-container"></div>
+                <div class="nav-music-group" style="position: relative; display: flex; align-items: center;">
+                    <button class="nav-cta nav-music-btn" onclick="toggleMusicPlayState()" id="topBarMusicBtn" title="Toggle Studio OST Music" style="cursor: pointer; display: inline-flex; align-items: center; gap: 0.6rem; background: var(--gradient-card); border: 1px solid var(--accent-cyan); padding: 0.55rem 1.1rem; border-radius: var(--radius-full);">
+                        <i class="fa-solid fa-play" id="navMusicPlayIcon" style="color: var(--accent-cyan);"></i>
+                        <span id="navMusicText">Play OST</span>
+                        <div class="header-music-eq" id="headerMusicEq"><span></span><span></span><span></span></div>
+                    </button>
+                    <button class="nav-music-settings-btn" onclick="toggleTopAudioMenu(event)" title="Track Selection & Volume" style="background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.3); color: var(--accent-cyan); border-radius: 50%; width: 34px; height: 34px; margin-left: 0.4rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-sliders"></i>
+                    </button>
+
+                    <!-- Top Bar Dropdown Audio Menu -->
+                    <div class="top-audio-dropdown" id="topAudioDropdown" style="display: none; position: absolute; top: calc(100% + 14px); right: 0; width: 280px; background: rgba(10, 13, 20, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(0, 242, 254, 0.4); border-radius: var(--radius-md); padding: 1.1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.9); z-index: 10000;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <span style="font-family: 'Orbitron', monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 700;">
+                                <i class="fa-solid fa-certificate"></i> Hi-Res Studio OST
+                            </span>
+                            <span style="font-size: 0.7rem; color: var(--text-dim);" id="topAudioDuration">03:24</span>
+                        </div>
+                        <div style="font-family: 'Orbitron', sans-serif; font-size: 0.88rem; color: #fff; margin-bottom: 0.2rem;" id="topAudioTrackTitle">Nexus Singularity</div>
+                        <div style="font-size: 0.72rem; color: var(--accent-cyan); margin-bottom: 0.8rem;" id="topAudioGenre">Cyberpunk Synthwave</div>
+
+                        <!-- Progress Bar -->
+                        <div style="height: 5px; background: rgba(255,255,255,0.12); border-radius: 4px; cursor: pointer; margin-bottom: 0.8rem;" id="topProgressBarBg">
+                            <div style="height: 100%; width: 0%; background: var(--gradient-neon); border-radius: 4px;" id="topProgressBarFill"></div>
+                        </div>
+
+                        <!-- Controls -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;">
+                            <button class="music-btn" onclick="changeTrack(-1)" title="Previous Track"><i class="fa-solid fa-backward-step"></i></button>
+                            <button class="music-btn play-btn" onclick="toggleMusicPlayState()" title="Play/Pause"><i class="fa-solid fa-play" id="topDropdownPlayIcon"></i></button>
+                            <button class="music-btn" onclick="changeTrack(1)" title="Next Track"><i class="fa-solid fa-forward-step"></i></button>
+                            <button class="music-btn" id="topLoopBtn" onclick="toggleLoopMode()" title="Loop Track"><i class="fa-solid fa-repeat"></i></button>
+                            <button class="music-btn" id="topBassBtn" onclick="toggleBassBoost()" title="Bass Boost"><i class="fa-solid fa-bolt"></i></button>
+                        </div>
+
+                        <!-- Volume -->
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <i class="fa-solid fa-volume-high" style="color: var(--text-dim); font-size: 0.8rem;"></i>
+                            <input type="range" id="topVolSlider" min="0" max="1" step="0.05" value="0.5" style="width: 100%; accent-color: var(--accent-cyan);" />
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <span class="badge-dot"></span>
+                            <span>Indie Game Dev • Powered by Unity & Blender</span>
+                        </div>
+                        <h1 class="hero-title">
+                            Forging <span class="text-gradient">Immersive 3D Worlds</span> & Epic Adventures
+                        </h1>
+                        <p class="hero-description">
+                            Welcome to <strong>Nexus Forge Studios</strong>. We design high-octane action, rich sci-fi atmospheres, and deep fantasy worlds crafted with Unity Engine and custom 3D art from Blender.
+                        </p>
+                        <div class="hero-actions">
+                            <a href="games.html" class="btn btn-primary">
+                                <i class="fa-solid fa-play"></i> Explore Games
+                            </a>
+                            <a href="contact.html" class="btn btn-secondary">
+                                <i class="fa-solid fa-envelope"></i> Contact Developer
+                            </a>
+                        </div>
+                        <div class="hero-tech">
+                            <span>Core Tech:</span>
+                            <div class="tech-pills">
+                                <div class="tech-pill"><i class="fa-brands fa-unity"></i> Unity 3D</div>
+                                <div class="tech-pill"><i class="fa-solid fa-cubes"></i> Blender 3D</div>
+                                <div class="tech-pill"><i class="fa-solid fa-code"></i> C# Scripting</div>
+                                <div class="tech-pill"><i class="fa-solid fa-wand-magic-sparkles"></i> VFX & Shaders</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-visual">
+                        <div class="hero-image-wrapper">
+                            <img src="images/hero.jpg" alt="Nexus Forge Featured Game Screenshot" width="1376" height="768" fetchpriority="high" />
+                        </div>
+                        <div class="hero-float-card">
+                            <div class="float-icon">
+                                <i class="fa-solid fa-fire-flame-curved"></i>
+                            </div>
+                            <div class="float-info">
+                                <h4>Cyber Vanguard</h4>
+                                <p>Featured Action RPG • Playable Alpha</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3><span class="counter" data-target="3">3</span>+</h3>
+                        <p>Original Game Titles</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3><span class="counter" data-target="150">150</span>+</h3>
+                        <p>Blender 3D Models Created</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3><span class="counter" data-target="100">100</span>%</h3>
+                        <p>Custom C# Mechanics</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3><span class="counter" data-target="24">24</span>/7</h3>
+                        <p>Passion for Gaming</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Games Spotlight -->
+        <section class="section-padding">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class="fa-solid fa-trophy"></i> Featured Projects</span>
+                    <h2>Explore Our <span class="text-gradient">Latest Games</span></h2>
+                    <p>Each title features tailor-made mechanics in Unity and handcrafted 3D assets and animations sculpted in Blender.</p>
+                </div>
+
+                <div class="games-grid">
+                    <!-- Populated dynamically via script.js -->
+                </div>
+
+                <div style="text-align: center; margin-top: 3.5rem;">
+                    <a href="games.html" class="btn btn-primary">
+                        <i class="fa-solid fa-grid-2"></i> View Full Game Library
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Development Pipeline -->
+        <section class="section-padding" style="background: var(--bg-secondary); border-top: 1px solid var(--border-color);">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class="fa-solid fa-gears"></i> Production Pipeline</span>
+                    <h2>How We Build <span class="text-gradient">Our Games</span></h2>
+                    <p>From 3D concept modeling to physics systems and particle shaders, here is our game development workflow.</p>
+                </div>
+
+                <div class="pipeline-grid">
+                    <div class="pipeline-card">
+                        <div class="pipeline-icon">
+                            <i class="fa-solid fa-cubes"></i>
+                        </div>
+                        <h3>Blender 3D Asset Creation</h3>
+                        <p>
+                            High-poly sculpting, retopology, UV unwrapping, and character rigging. Every character, monster, and environment prop is custom built in Blender.
+                        </p>
+                    </div>
+
+                    <div class="pipeline-card">
+                        <div class="pipeline-icon">
+                            <i class="fa-brands fa-unity"></i>
+                        </div>
+                        <h3>Unity Engine Architecture</h3>
+                        <p>
+                            Robust gameplay programming in C#, implementing modular combat states, intelligent enemy AI behavior trees, and responsive controls.
+                        </p>
+                    </div>
+
+                    <div class="pipeline-card">
+                        <div class="pipeline-icon">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h3>VFX & Lighting Polish</h3>
+                        <p>
+                            Volumetric fog, custom HLSL/Shader Graph effects, post-processing color grading, and dynamic audio soundscapes for maximum immersion.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Banner -->
+        <section class="section-padding">
+            <div class="container">
+                <div style="background: var(--gradient-card); border: 1px solid rgba(0, 242, 254, 0.3); border-radius: var(--radius-lg); padding: 4rem 2rem; text-align: center; box-shadow: var(--glow-cyan);">
+                    <h2 style="font-size: 2.3rem; margin-bottom: 1rem;">Have a Project or Want to Collaborate?</h2>
+                    <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem; font-size: 1.1rem;">
+                        Whether you are looking for custom 3D game models, Unity gameplay programming, or want to discuss gaming projects, let’s talk!
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="contact.html" class="btn btn-primary">
+                            <i class="fa-solid fa-paper-plane"></i> Send a Message
+                        </a>
+                        <a href="login.html" class="btn btn-secondary">
+                            <i class="fa-solid fa-user"></i> Sign In to Portal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Game Detail Modal Dialog -->
+    <div class="modal-overlay" id="gameModal" role="dialog" aria-modal="true">
+        <div class="modal-card">
+            <button class="modal-close" id="modalClose" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="modalImg" class="modal-image" src="" alt="Game preview" />
+            <div class="modal-content">
+                <h3 id="modalTitle" class="modal-title">Game Title</h3>
+                <p id="modalDesc" class="modal-desc">Game description text goes here.</p>
+                
+                <div class="modal-features" id="modalFeatures">
+                    <!-- Injected by script.js -->
+                </div>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="contact.html" class="btn btn-primary">
+                        <i class="fa-solid fa-envelope"></i> Request Demo / Inquire
+                    </a>
+                    <button class="btn btn-secondary" onclick="document.getElementById('gameModal').classList.remove('active'); document.body.style.overflow='';">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container">
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="brand-logo">
+                        <div class="logo-icon"><img src="images/logo.png" alt="Nexus Forge Logo" width="70" height="70" loading="lazy" /></div>
+                        <span>NEXUS<span class="text-gradient">FORGE</span></span>
+                    </a>
+                    <p>
+                        Independent game studio crafting cutting-edge 3D interactive experiences using Unity Engine and Blender 3D.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Developer</a></li>
+                        <li><a href="games.html">Games Catalog</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="login.html">Sign In / Portal</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Tech & Tools</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">Unity 3D Engine</a></li>
+                        <li><a href="about.html">Blender 3D Modeling</a></li>
+                        <li><a href="about.html">C# Game Systems</a></li>
+                        <li><a href="about.html">HLSL Shader Graph</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Account Portal</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem;">
+                        Sign in for developer and player access:
+                    </p>
+                    <a href="login.html" class="btn btn-sm btn-outline-cyan">
+                        <i class="fa-solid fa-user"></i> Portal Login
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Nexus Forge Studios. Developed by A. Rehman. All rights reserved.</p>
+                <p style="color: var(--accent-cyan);">Built with HTML5, CSS3 & JavaScript</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

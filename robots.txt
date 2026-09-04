@@ -1,0 +1,8 @@
+﻿User-agent: *
+Allow: /
+Disallow: /login.html
+Disallow: /login
+Disallow: /admin.html
+Disallow: /admin
+
+Sitemap: https://nexusforge-pi.vercel.app/sitemap.xml

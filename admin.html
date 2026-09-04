@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard & Studio CMS | Nexus Forge Studios</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Website Favicon & Brand Icon -->
+    <link rel="icon" type="image/png" href="images/logo.png" />
+    <!-- Chart.js & Supabase Cloud SDK -->
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="script.js"></script>
+</head>
+<body id="adminDashboard">
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="container nav-container">
+            <a href="admin.html" class="brand-logo">
+                <div class="logo-icon">
+                    <img src="images/logo.png" alt="Nexus Admin Logo" width="70" height="70" />
+                </div>
+                <span>NEXUS<span class="text-gradient">ADMIN</span></span>
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Website</a>
+                <a href="about.html" class="nav-link" target="_blank"><i class="fa-solid fa-user-astronaut"></i> About Page</a>
+                <a href="games.html" class="nav-link" target="_blank"><i class="fa-solid fa-gamepad"></i> Game Catalog</a>
+                <a href="contact.html" class="nav-link" target="_blank"><i class="fa-solid fa-envelope"></i> Contact Page</a>
+                <button class="btn btn-sm btn-danger" id="adminLogoutBtn">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </nav>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Admin Layout with Sidebar -->
+    <main class="admin-layout">
+
+        <!-- 1. Sidebar Navigation Bar -->
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <h3><i class="fa-solid fa-shield-halved" style="color: var(--accent-cyan);"></i> Studio Manager</h3>
+                <p>Welcome, <strong>A. Rehman</strong></p>
+                <div class="admin-badge" id="backendStatusBadge" style="margin-top: 0.8rem; font-size: 0.72rem; padding: 0.25rem 0.6rem;">
+                    <i class="fa-solid fa-cloud"></i> Supabase Connected
+                </div>
+            </div>
+
+            <nav class="admin-nav-menu">
+                <button class="admin-nav-item active" data-tab="dashboard">
+                    <div class="admin-nav-item-content">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </div>
+                </button>
+
+                <button class="admin-nav-item" data-tab="users">
+                    <div class="admin-nav-item-content">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Users & Players</span>
+                    </div>
+                </button>
+
+                <button class="admin-nav-item" data-tab="games">
+                    <div class="admin-nav-item-content">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>Game Catalog</span>
+                    </div>
+                </button>
+
+                <button class="admin-nav-item" data-tab="messages">
+                    <div class="admin-nav-item-content">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>Inquiries Inbox</span>
+                    </div>
+                    <span class="admin-badge-count" id="sidebarUnreadBadge" style="display: none;">0</span>
+                </button>
+
+                <button class="admin-nav-item" data-tab="about">
+                    <div class="admin-nav-item-content">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>About Us CMS</span>
+                    </div>
+                </button>
+
+                <button class="admin-nav-item" data-tab="reviews">
+                    <div class="admin-nav-item-content">
+                        <i class="fa-solid fa-star"></i>
+                        <span>Reviews & Ratings</span>
+                    </div>
+                </button>
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <button class="btn btn-sm btn-secondary" id="resetSampleDataBtn" style="width: 100%; font-size: 0.8rem;" title="Restore sample demo games and messages">
+                    <i class="fa-solid fa-rotate-left"></i> Reset Demo Data
+                </button>
+            </div>
+        </aside>
+
+        <!-- 2. Main Content Views (Modular Tabs) -->
+        <section class="admin-main-content">
+
+            <!-- Top View Header -->
+            <div class="admin-view-header">
+                <div>
+                    <h2 id="adminCurrentViewTitle">Analytics & Overview Dashboard</h2>
+                    <p>Central management center for Nexus Forge Studios.</p>
+                </div>
+                <div class="admin-actions">
+                    <a href="index.html" target="_blank" class="btn btn-sm btn-secondary">
+                        <i class="fa-solid fa-eye"></i> View Live Site
+                    </a>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 1: DASHBOARD VIEW (Stats & Charts)                     -->
+            <!-- ========================================================= -->
+            <div class="admin-tab-view active" id="view-dashboard">
+                <!-- Overview Stats Cards -->
+                <div class="admin-stats-grid" style="margin-bottom: 2.5rem;">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon icon-blue">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <div class="admin-stat-info">
+                            <h3 id="statTotalGames">3</h3>
+                            <p>Published Games</p>
+                        </div>
+                    </div>
+
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon icon-amber">
+                            <i class="fa-solid fa-envelope-circle-check"></i>
+                        </div>
+                        <div class="admin-stat-info">
+                            <h3 id="statUnreadMessages" style="color: #f59e0b;">0</h3>
+                            <p>Unread Messages</p>
+                        </div>
+                    </div>
+
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon icon-green">
+                            <i class="fa-solid fa-inbox"></i>
+                        </div>
+                        <div class="admin-stat-info">
+                            <h3 id="statTotalMessages">0</h3>
+                            <p>Total Inquiries</p>
+                        </div>
+                    </div>
+
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon icon-purple">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="admin-stat-info">
+                            <h3 id="statTotalUsers">1</h3>
+                            <p>Registered Players</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graph 1: Website Traffic & Game Demo Performance -->
+                <div class="admin-charts-section" style="margin-bottom: 2.5rem;">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>
+                                <i class="fa-solid fa-chart-line" style="color: var(--accent-cyan);"></i>
+                                Website Traffic & Game Demo Performance
+                            </h3>
+                            <span style="font-size: 0.82rem; color: var(--text-dim);">Live Growth Metrics (Weekly)</span>
+                        </div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="websiteProgressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graph 2: User / Player Login Activity -->
+                <div class="admin-charts-section">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>
+                                <i class="fa-solid fa-chart-column" style="color: var(--accent-amber);"></i>
+                                User & Player Login Frequency Analytics
+                            </h3>
+                            <div class="chart-toggles">
+                                <button class="chart-toggle-btn active" id="toggleDailyLogins" onclick="switchLoginAnalyticsTimeframe('daily')">
+                                    Daily View
+                                </button>
+                                <button class="chart-toggle-btn" id="toggleMonthlyLogins" onclick="switchLoginAnalyticsTimeframe('monthly')">
+                                    Monthly View
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-canvas-wrapper">
+                            <canvas id="userLoginsAnalyticsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 2: USERS & PLAYERS MANAGEMENT VIEW                    -->
+            <!-- ========================================================= -->
+            <div class="admin-tab-view" id="view-users">
+                <div class="inbox-panel">
+                    <div class="inbox-header">
+                        <h2>
+                            <i class="fa-solid fa-users-gear" style="color: var(--accent-cyan);"></i>
+                            Registered Players & Account Control
+                        </h2>
+
+                        <div class="inbox-controls">
+                            <!-- Search Box -->
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="userSearchInput" placeholder="Search players by name or email..." />
+                            </div>
+
+                            <!-- Status Filter -->
+                            <select class="filter-select" id="userStatusFilter">
+                                <option value="all">All Accounts</option>
+                                <option value="active">Active Only</option>
+                                <option value="blocked">Blocked Only</option>
+                            </select>
+
+                            <!-- Sync Button -->
+                            <button class="btn btn-sm btn-outline-cyan" onclick="refreshAdminUsersCloud(event)" id="refreshUsersBtn" title="Sync live users from Supabase Cloud" style="display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;">
+                                <i class="fa-solid fa-rotate"></i> Sync Cloud Users
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Users Table -->
+                    <div class="inbox-table-responsive">
+                        <table class="messages-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 120px;">Status</th>
+                                    <th style="width: 200px;">Player Name</th>
+                                    <th style="width: 240px;">Email Address</th>
+                                    <th style="width: 160px;">Registered Date</th>
+                                    <th style="width: 160px;">Last Login</th>
+                                    <th style="width: 120px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Populated dynamically via script.js -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyUsersState" class="empty-inbox" style="display: none;">
+                        <i class="fa-solid fa-user-slash"></i>
+                        <h3>No Users Found</h3>
+                        <p>No registered players match your search filter.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 3: GAMES CATALOG MANAGEMENT VIEW                      -->
+            <!-- ========================================================= -->
+            <div class="admin-tab-view" id="view-games">
+                <div class="game-management-panel">
+                    <div class="game-mgmt-header">
+                        <h2>
+                            <i class="fa-solid fa-cubes" style="color: var(--accent-cyan);"></i>
+                            Game Catalog Management
+                        </h2>
+                        <button class="btn btn-sm btn-primary" onclick="openAddGameModal()">
+                            <i class="fa-solid fa-plus"></i> Add New Game
+                        </button>
+                    </div>
+
+                    <div class="game-admin-grid" id="adminGamesGrid">
+                        <!-- Populated dynamically via script.js -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 4: MESSAGES INBOX VIEW                                -->
+            <!-- ========================================================= -->
+            <div class="admin-tab-view" id="view-messages">
+                <div class="inbox-panel">
+                    <div class="inbox-header">
+                        <h2>
+                            <i class="fa-solid fa-comments" style="color: var(--accent-cyan);"></i>
+                            Inquiry Messages Inbox
+                        </h2>
+
+                        <div class="inbox-controls">
+                            <!-- Search Box -->
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="messageSearchInput" placeholder="Search inquiries..." />
+                            </div>
+
+                            <!-- Status Filter -->
+                            <select class="filter-select" id="messageFilterSelect">
+                                <option value="all">All Messages</option>
+                                <option value="unread">Unread Only</option>
+                                <option value="read">Read Only</option>
+                            </select>
+
+                            <button class="btn btn-sm btn-danger" id="clearAllMessagesBtn" title="Clear all messages">
+                                <i class="fa-solid fa-trash-can"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Messages Table -->
+                    <div class="inbox-table-responsive">
+                        <table class="messages-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 120px;">Status</th>
+                                    <th style="width: 220px;">Sender</th>
+                                    <th>Subject & Snippet</th>
+                                    <th style="width: 160px;">Received At</th>
+                                    <th style="width: 130px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="messagesTableBody">
+                                <!-- Populated dynamically via script.js -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyInboxState" class="empty-inbox" style="display: none;">
+                        <i class="fa-solid fa-envelope-open"></i>
+                        <h3>No Messages in Inbox</h3>
+                        <p>Inquiries submitted on the contact page will appear here automatically.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 5: ABOUT US CONTENT MANAGEMENT (CMS) VIEW            -->
+            <!-- ========================================================= -->
+            <div class="admin-tab-view" id="view-about">
+                <div class="about-cms-card">
+                    <form id="aboutCmsForm">
+                        <h3 class="cms-section-title">
+                            <i class="fa-solid fa-heading"></i> Main Headline & Bio Intro
+                        </h3>
+
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <div class="form-group">
+                                <label for="cmsAboutBadge" class="form-label">Sub-Tag / Badge Text</label>
+                                <input type="text" id="cmsAboutBadge" class="form-control" placeholder="The Developer & Vision" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="cmsAboutHeadline" class="form-label">Main Headline</label>
+                                <input type="text" id="cmsAboutHeadline" class="form-control" placeholder="Passionate Indie Game Dev & 3D Digital Sculptor" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label for="cmsAboutBio1" class="form-label">Developer Bio (Paragraph 1)</label>
+                            <textarea id="cmsAboutBio1" class="form-control" style="min-height: 90px;" required></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 2rem;">
+                            <label for="cmsAboutBio2" class="form-label">Developer Bio (Paragraph 2)</label>
+                            <textarea id="cmsAboutBio2" class="form-control" style="min-height: 90px;" required></textarea>
+                        </div>
+
+                        <h3 class="cms-section-title">
+                            <i class="fa-solid fa-chart-simple"></i> Core Development Skills (%)
+                        </h3>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                            <div class="form-group">
+                                <label for="cmsSkillUnity" class="form-label"><i class="fa-brands fa-unity"></i> Unity 3D (%)</label>
+                                <input type="number" id="cmsSkillUnity" class="form-control" min="1" max="100" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="cmsSkillBlender" class="form-label"><i class="fa-solid fa-cubes"></i> Blender 3D (%)</label>
+                                <input type="number" id="cmsSkillBlender" class="form-control" min="1" max="100" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="cmsSkillCSharp" class="form-label"><i class="fa-solid fa-code"></i> C# Systems (%)</label>
+                                <input type="number" id="cmsSkillCSharp" class="form-control" min="1" max="100" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="cmsSkillShader" class="form-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Shaders & VFX (%)</label>
+                                <input type="number" id="cmsSkillShader" class="form-control" min="1" max="100" required />
+                            </div>
+                        </div>
+
+                        <h3 class="cms-section-title">
+                            <i class="fa-solid fa-compass"></i> Core Development Pillars
+                        </h3>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: var(--radius-md);">
+                                <h4 style="color: var(--accent-cyan); margin-bottom: 0.8rem;"><i class="fa-solid fa-bolt"></i> Pillar 1</h4>
+                                <div class="form-group">
+                                    <label for="cmsPillar1Title" class="form-label">Title</label>
+                                    <input type="text" id="cmsPillar1Title" class="form-control" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="cmsPillar1Desc" class="form-label">Description</label>
+                                    <textarea id="cmsPillar1Desc" class="form-control" style="min-height: 70px;" required></textarea>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: var(--radius-md);">
+                                <h4 style="color: var(--accent-purple); margin-bottom: 0.8rem;"><i class="fa-solid fa-palette"></i> Pillar 2</h4>
+                                <div class="form-group">
+                                    <label for="cmsPillar2Title" class="form-label">Title</label>
+                                    <input type="text" id="cmsPillar2Title" class="form-control" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="cmsPillar2Desc" class="form-label">Description</label>
+                                    <textarea id="cmsPillar2Desc" class="form-control" style="min-height: 70px;" required></textarea>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: var(--radius-md);">
+                                <h4 style="color: var(--accent-amber); margin-bottom: 0.8rem;"><i class="fa-solid fa-microchip"></i> Pillar 3</h4>
+                                <div class="form-group">
+                                    <label for="cmsPillar3Title" class="form-label">Title</label>
+                                    <input type="text" id="cmsPillar3Title" class="form-control" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="cmsPillar3Desc" class="form-label">Description</label>
+                                    <textarea id="cmsPillar3Desc" class="form-control" style="min-height: 70px;" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                            <a href="about.html" target="_blank" class="btn btn-secondary">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Preview About Page
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-floppy-disk"></i> Save About Us Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ========================================================= -->
+            <!-- TAB 6: REVIEWS & RATINGS MODERATION VIEW                  -->
+            <!-- ========================================================= -->
+            <div class="admin-tab-view" id="view-reviews">
+                <div class="inbox-panel">
+                    <div class="inbox-header">
+                        <h2>
+                            <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
+                            Player Game Ratings & Reviews Moderation
+                        </h2>
+
+                        <div class="inbox-controls">
+                            <!-- Search Box -->
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="reviewSearchInput" placeholder="Search reviews by player, game, or text..." />
+                            </div>
+
+                            <!-- Rating Filter -->
+                            <select class="filter-select" id="reviewRatingFilter">
+                                <option value="all">All Star Ratings</option>
+                                <option value="5">5 Stars Only</option>
+                                <option value="4">4 Stars Only</option>
+                                <option value="3">3 Stars Only</option>
+                                <option value="2">2 Stars Only</option>
+                                <option value="1">1 Star Only</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Table -->
+                    <div class="inbox-table-responsive">
+                        <table class="messages-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 140px;">Rating</th>
+                                    <th style="width: 180px;">Game Title</th>
+                                    <th style="width: 220px;">Reviewer / Player</th>
+                                    <th>Review Comment</th>
+                                    <th style="width: 160px;">Submitted</th>
+                                    <th style="width: 120px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reviewsTableBody">
+                                <!-- Populated dynamically via script.js -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyReviewsState" class="empty-inbox" style="display: none;">
+                        <i class="fa-solid fa-comment-slash"></i>
+                        <h3>No Reviews Found</h3>
+                        <p>No player ratings or reviews match your filter.</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Modal 1: Add / Edit Game Dialog -->
+    <div class="modal-overlay" id="adminGameModal" role="dialog" aria-modal="true">
+        <div class="modal-card" style="max-width: 650px;">
+            <button class="modal-close" onclick="closeAdminGameModal()" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-content" style="padding: 2.2rem;">
+                <h3 id="gameModalHeading" style="font-size: 1.4rem; color: #fff; margin-bottom: 1.5rem;">Add New Game Title</h3>
+
+                <form id="adminGameForm">
+                    <input type="hidden" id="gameEditId" />
+
+                    <div class="form-group">
+                        <label for="gameFormTitle" class="form-label">Game Title *</label>
+                        <input type="text" id="gameFormTitle" class="form-control" placeholder="e.g. Neon Horizon" required />
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="gameFormCategory" class="form-label">Genre / Category</label>
+                            <select id="gameFormCategory" class="form-control" style="cursor: pointer;">
+                                <option value="scifi">Cyberpunk & Sci-Fi</option>
+                                <option value="fantasy">Dark Fantasy & RPG</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gameFormStatus" class="form-label">Release Status</label>
+                            <select id="gameFormStatus" class="form-control" style="cursor: pointer;">
+                                <option value="Playable Alpha">Playable Alpha</option>
+                                <option value="Playable Demo">Playable Demo</option>
+                                <option value="In Development">In Development</option>
+                                <option value="Early Access">Early Access</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="gameFormEngine" class="form-label">Engine & 3D Tools</label>
+                            <input type="text" id="gameFormEngine" class="form-control" placeholder="e.g. Unity 2023 & Blender 3D" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gameFormImage" class="form-label">Cover Image Path</label>
+                            <input type="text" id="gameFormImage" class="form-control" placeholder="images/game1.jpg" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gameFormTags" class="form-label">Tags (comma-separated)</label>
+                        <input type="text" id="gameFormTags" class="form-control" placeholder="Action RPG, Hack & Slash, Cyberpunk" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gameFormDesc" class="form-label">Game Story & Description *</label>
+                        <textarea id="gameFormDesc" class="form-control" style="min-height: 100px;" placeholder="Describe the gameplay, combat mechanics, and setting..." required></textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem;">
+                        <button type="button" class="btn btn-secondary" onclick="closeAdminGameModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Game Title
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Message Review Dialog -->
+    <div class="modal-overlay" id="adminMessageModal" role="dialog" aria-modal="true">
+        <div class="modal-card" style="max-width: 650px;">
+            <button class="modal-close" onclick="closeAdminMessageModal()" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-content" style="padding: 2.2rem;">
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem;">
+                    <div class="logo-icon" style="width: 44px; height: 44px; font-size: 1.2rem;">
+                        <img src="images/logo.png" alt="Nexus Logo" />
+                    </div>
+                    <div>
+                        <h3 id="modalMsgSubject" style="font-size: 1.3rem; color: #fff; margin-bottom: 0.2rem;">Subject</h3>
+                        <p style="color: var(--text-dim); font-size: 0.85rem;" id="modalMsgDate">2026-08-28 12:00</p>
+                    </div>
+                </div>
+
+                <div class="msg-detail-box">
+                    <div class="msg-meta-row">
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600; display: block;">Sender Name</span>
+                            <strong id="modalMsgName" style="color: #fff; font-size: 0.95rem;">Sender Name</strong>
+                        </div>
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600; display: block;">Email Address</span>
+                            <span id="modalMsgEmail" style="color: var(--accent-cyan); font-size: 0.95rem;">sender@example.com</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600; display: block; margin-bottom: 0.5rem;">Message Content</span>
+                        <div id="modalMsgBody" class="msg-body-content">
+                            Message text appears here...
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div style="display: flex; gap: 0.8rem;">
+                        <a id="modalReplyBtn" href="#" class="btn btn-sm btn-primary">
+                            <i class="fa-solid fa-reply"></i> Reply to Sender
+                        </a>
+                        <button id="modalDeleteBtn" class="btn btn-sm btn-danger">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </div>
+                    <button class="btn btn-sm btn-secondary" onclick="closeAdminMessageModal()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container">
+        <div class="toast" id="toast"></div>
+    </div>
+</body>
+</html>

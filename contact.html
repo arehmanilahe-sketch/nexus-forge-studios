@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Developer | Nexus Forge Studios</title>
+    <meta name="description" content="Send a message directly to game developer A. Rehman. Messages are delivered instantly to the developer Admin Portal." />
+    <meta name="keywords" content="Contact Game Developer, Nexus Forge Studios, Unity Collaboration, 3D Game Inquiries, A. Rehman" />
+    <meta name="author" content="A. Rehman" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nexusforge-pi.vercel.app/contact" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nexus Forge Studios" />
+    <meta property="og:title" content="Contact Developer | Nexus Forge Studios" />
+    <meta property="og:description" content="Send a message directly to game developer A. Rehman. Messages are delivered instantly to the developer Admin Portal." />
+    <meta property="og:url" content="https://nexusforge-pi.vercel.app/contact" />
+    <meta property="og:image" content="https://nexusforge-pi.vercel.app/images/hero.jpg" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Contact Developer | Nexus Forge Studios" />
+    <meta name="twitter:description" content="Send a message directly to game developer A. Rehman. Messages are delivered instantly to the developer Admin Portal." />
+    <meta name="twitter:image" content="https://nexusforge-pi.vercel.app/images/hero.jpg" />
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Website Favicon & Brand Icon -->
+    <link rel="icon" type="image/png" href="images/logo.png" />
+
+    <!-- Schema.org JSON-LD Structured Data for ContactPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact Nexus Forge Studios",
+      "url": "https://nexusforge-pi.vercel.app/contact",
+      "description": "Send a message directly to game developer A. Rehman.",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "Nexus Forge Studios",
+        "email": "arehman.ilahe@gmail.com",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Game Development Inquiries",
+          "email": "arehman.ilahe@gmail.com"
+        }
+      }
+    }
+    </script>
+
+    <!-- Supabase Cloud SDK -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="container nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="logo-icon">
+                    <img src="images/logo.png" alt="Nexus Forge Studios Logo" width="70" height="70" />
+                </div>
+                <span>NEXUS<span class="text-gradient">FORGE</span></span>
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="games.html" class="nav-link">Our Games</a>
+                <a href="games.html#ratingsSection" class="nav-link"><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Rate Games</a>
+                <a href="contact.html" class="nav-link active">Contact Us</a>
+                <div class="nav-auth-container"></div>
+                <div class="nav-music-group" style="position: relative; display: flex; align-items: center;">
+                    <button class="nav-cta nav-music-btn" onclick="toggleMusicPlayState()" id="topBarMusicBtn" title="Toggle Studio OST Music" style="cursor: pointer; display: inline-flex; align-items: center; gap: 0.6rem; background: var(--gradient-card); border: 1px solid var(--accent-cyan); padding: 0.55rem 1.1rem; border-radius: var(--radius-full);">
+                        <i class="fa-solid fa-play" id="navMusicPlayIcon" style="color: var(--accent-cyan);"></i>
+                        <span id="navMusicText">Play OST</span>
+                        <div class="header-music-eq" id="headerMusicEq"><span></span><span></span><span></span></div>
+                    </button>
+                    <button class="nav-music-settings-btn" onclick="toggleTopAudioMenu(event)" title="Track Selection & Volume" style="background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.3); color: var(--accent-cyan); border-radius: 50%; width: 34px; height: 34px; margin-left: 0.4rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-sliders"></i>
+                    </button>
+
+                    <!-- Top Bar Dropdown Audio Menu -->
+                    <div class="top-audio-dropdown" id="topAudioDropdown" style="display: none; position: absolute; top: calc(100% + 14px); right: 0; width: 280px; background: rgba(10, 13, 20, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(0, 242, 254, 0.4); border-radius: var(--radius-md); padding: 1.1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.9); z-index: 10000;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <span style="font-family: 'Orbitron', monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 700;">
+                                <i class="fa-solid fa-certificate"></i> Hi-Res Studio OST
+                            </span>
+                            <span style="font-size: 0.7rem; color: var(--text-dim);" id="topAudioDuration">03:24</span>
+                        </div>
+                        <div style="font-family: 'Orbitron', sans-serif; font-size: 0.88rem; color: #fff; margin-bottom: 0.2rem;" id="topAudioTrackTitle">Nexus Singularity</div>
+                        <div style="font-size: 0.72rem; color: var(--accent-cyan); margin-bottom: 0.8rem;" id="topAudioGenre">Cyberpunk Synthwave</div>
+
+                        <!-- Progress Bar -->
+                        <div style="height: 5px; background: rgba(255,255,255,0.12); border-radius: 4px; cursor: pointer; margin-bottom: 0.8rem;" id="topProgressBarBg">
+                            <div style="height: 100%; width: 0%; background: var(--gradient-neon); border-radius: 4px;" id="topProgressBarFill"></div>
+                        </div>
+
+                        <!-- Controls -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;">
+                            <button class="music-btn" onclick="changeTrack(-1)" title="Previous Track"><i class="fa-solid fa-backward-step"></i></button>
+                            <button class="music-btn play-btn" onclick="toggleMusicPlayState()" title="Play/Pause"><i class="fa-solid fa-play" id="topDropdownPlayIcon"></i></button>
+                            <button class="music-btn" onclick="changeTrack(1)" title="Next Track"><i class="fa-solid fa-forward-step"></i></button>
+                            <button class="music-btn" id="topLoopBtn" onclick="toggleLoopMode()" title="Loop Track"><i class="fa-solid fa-repeat"></i></button>
+                            <button class="music-btn" id="topBassBtn" onclick="toggleBassBoost()" title="Bass Boost"><i class="fa-solid fa-bolt"></i></button>
+                        </div>
+
+                        <!-- Volume -->
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <i class="fa-solid fa-volume-high" style="color: var(--text-dim); font-size: 0.8rem;"></i>
+                            <input type="range" id="topVolSlider" min="0" max="1" step="0.05" value="0.5" style="width: 100%; accent-color: var(--accent-cyan);" />
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Contact Section -->
+        <section class="section-padding">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class="fa-solid fa-paper-plane"></i> Direct Studio Inbox</span>
+                    <h1 class="hero-title" style="font-size: 2.4rem; margin-bottom: 1rem;">Contact <span class="text-gradient">The Developer</span></h1>
+                    <p>
+                        Have questions regarding our games, looking to collaborate on a Unity project, or interested in custom Blender 3D assets? Sign in to send your inquiry directly into our <strong>Admin Dashboard</strong>.
+                    </p>
+                </div>
+
+                <div class="contact-wrapper">
+                    <!-- Left: Interactive Gated Contact Form -->
+                    <div class="contact-card" id="contactGatedWrapper">
+                        <div id="activeUserBar"></div>
+
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: #fff;">Send a Direct Inquiry</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.8rem;">
+                            Your message is transmitted instantly to developer <strong>A. Rehman's</strong> Admin Control Center.
+                        </p>
+
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Your Name</label>
+                                <input type="text" id="name" class="form-control" placeholder="Your Name" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email" class="form-label">Your Email Address</label>
+                                <input type="email" id="email" class="form-control" placeholder="Your Email" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject" class="form-label">Subject / Inquiry Topic *</label>
+                                <input type="text" id="subject" class="form-control" placeholder="e.g. Unity Game Collaboration / 3D Asset Commission" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message" class="form-label">Your Message *</label>
+                                <textarea id="message" class="form-control" placeholder="Write your message here... Let us know your ideas, feedback, or project details." required></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                <i class="fa-solid fa-paper-plane"></i> Send to Developer Admin Panel
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right: Developer Information & Quick Connect -->
+                    <div class="contact-info-list">
+                        <!-- Direct Email Card -->
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div class="contact-info-text">
+                                <h4>Primary Studio Email</h4>
+                                <a href="mailto:arehman.ilahe@gmail.com">arehman.ilahe@gmail.com</a>
+                                <div>
+                                    <button class="copy-btn" onclick="copyEmailAddress()">
+                                        <i class="fa-solid fa-copy"></i> Click to Copy Email
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Production Tools Card -->
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fa-solid fa-laptop-code"></i>
+                            </div>
+                            <div class="contact-info-text">
+                                <h4>Development Expertise</h4>
+                                <p>Unity 3D Engine (URP & HDRP), Blender 3D, C# Programming, Shader Graph, Level Design.</p>
+                            </div>
+                        </div>
+
+                        <!-- Response Time Card -->
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="contact-info-text">
+                                <h4>Response Time</h4>
+                                <p>Typically within 24 to 48 hours for business inquiries and game collaborations.</p>
+                            </div>
+                        </div>
+
+                        <!-- Social / Developer Profiles -->
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon">
+                                <i class="fa-solid fa-globe"></i>
+                            </div>
+                            <div class="contact-info-text">
+                                <h4>Developer Channels</h4>
+                                <p style="margin-bottom: 0.8rem;">Follow upcoming releases and behind-the-scenes Blender sculpting:</p>
+                                <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="copy-btn"><i class="fa-brands fa-github"></i> GitHub</a>
+                                    <a href="https://itch.io" target="_blank" rel="noopener noreferrer" class="copy-btn"><i class="fa-brands fa-itch-io"></i> Itch.io</a>
+                                    <a href="https://store.steampowered.com" target="_blank" rel="noopener noreferrer" class="copy-btn"><i class="fa-brands fa-steam"></i> Steam</a>
+                                    <a href="https://artstation.com" target="_blank" rel="noopener noreferrer" class="copy-btn"><i class="fa-brands fa-artstation"></i> ArtStation</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Cyberpunk OST Music Player Dock -->
+    <div class="music-player-dock" id="musicPlayerDock">
+        <div class="music-icon-wrapper" id="musicToggleBtn" title="Click to Play / Pause Game OST">
+            <i class="fa-solid fa-play" id="musicPlayIcon"></i>
+        </div>
+
+        <div class="music-player-body">
+            <div class="music-track-info">
+                <div>
+                    <div class="music-track-title" id="musicTrackTitle">Nexus Singularity</div>
+                    <div class="music-track-artist" id="musicTrackArtist">Cyberpunk Synthwave</div>
+                </div>
+                <div class="music-visualizer" id="musicVisualizer">
+                    <div class="music-bar"></div>
+                    <div class="music-bar"></div>
+                    <div class="music-bar"></div>
+                    <div class="music-bar"></div>
+                </div>
+            </div>
+
+            <div class="music-controls">
+                <button class="music-btn" id="musicPrevBtn" title="Previous Track"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="music-btn play-btn" id="musicPlayPauseBtn" title="Play/Pause"><i class="fa-solid fa-play" id="musicMainPlayIcon"></i></button>
+                <button class="music-btn" id="musicNextBtn" title="Next Track"><i class="fa-solid fa-forward-step"></i></button>
+                <button class="music-btn" id="musicMuteBtn" title="Mute/Unmute" style="margin-left: auto;"><i class="fa-solid fa-volume-high" id="musicVolIcon"></i></button>
+                <button class="music-btn" id="musicMinimizeBtn" title="Collapse"><i class="fa-solid fa-chevron-down"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container">
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="brand-logo">
+                        <div class="logo-icon"><img src="images/logo.png" alt="Nexus Forge Logo" width="70" height="70" loading="lazy" /></div>
+                        <span>NEXUS<span class="text-gradient">FORGE</span></span>
+                    </a>
+                    <p>
+                        Independent game studio crafting cutting-edge 3D interactive experiences using Unity Engine and Blender 3D.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Developer</a></li>
+                        <li><a href="games.html">Games Catalog</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="login.html">Sign In / Portal</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Tech & Tools</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">Unity 3D Engine</a></li>
+                        <li><a href="about.html">Blender 3D Modeling</a></li>
+                        <li><a href="about.html">C# Game Systems</a></li>
+                        <li><a href="about.html">HLSL Shader Graph</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Account Portal</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem;">
+                        Sign in for developer and player access:
+                    </p>
+                    <a href="login.html" class="btn btn-sm btn-outline-cyan">
+                        <i class="fa-solid fa-user"></i> Portal Login
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Nexus Forge Studios. Developed by A. Rehman. All rights reserved.</p>
+                <p style="color: var(--accent-cyan);">Built with HTML5, CSS3 & JavaScript</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

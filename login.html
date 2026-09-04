@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In & Register | Nexus Forge Studios</title>
+    <meta name="description" content="Sign in to Nexus Forge Studios player portal or developer admin dashboard. Send direct inquiries and access exclusive alpha game demos." />
+    <meta name="keywords" content="Nexus Forge Studios Sign In, Player Portal, Game Developer Dashboard, Unity Games Account" />
+    <meta name="author" content="A. Rehman" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nexusforge-pi.vercel.app/login" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nexus Forge Studios" />
+    <meta property="og:title" content="Sign In & Register | Nexus Forge Studios" />
+    <meta property="og:description" content="Sign in to Nexus Forge Studios player portal or developer admin dashboard." />
+    <meta property="og:url" content="https://nexusforge-pi.vercel.app/login" />
+    <meta property="og:image" content="https://nexusforge-pi.vercel.app/images/hero.jpg" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Sign In & Register | Nexus Forge Studios" />
+    <meta name="twitter:description" content="Sign in to Nexus Forge Studios player portal or developer admin dashboard." />
+    <meta name="twitter:image" content="https://nexusforge-pi.vercel.app/images/hero.jpg" />
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Website Favicon & Brand Icon -->
+    <link rel="icon" type="image/png" href="images/logo.png" />
+
+    <!-- Supabase Cloud SDK -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="container nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="logo-icon">
+                    <img src="images/logo.png" alt="Nexus Forge Studios Logo" width="70" height="70" />
+                </div>
+                <span>NEXUS<span class="text-gradient">FORGE</span></span>
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="games.html" class="nav-link">Our Games</a>
+                <a href="games.html#ratingsSection" class="nav-link"><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Rate Games</a>
+                <a href="contact.html" class="nav-link">Contact Us</a>
+                <div class="nav-auth-container"></div>
+                <div class="nav-music-group" style="position: relative; display: flex; align-items: center;">
+                    <button class="nav-cta nav-music-btn" onclick="toggleMusicPlayState()" id="topBarMusicBtn" title="Toggle Studio OST Music" style="cursor: pointer; display: inline-flex; align-items: center; gap: 0.6rem; background: var(--gradient-card); border: 1px solid var(--accent-cyan); padding: 0.55rem 1.1rem; border-radius: var(--radius-full);">
+                        <i class="fa-solid fa-play" id="navMusicPlayIcon" style="color: var(--accent-cyan);"></i>
+                        <span id="navMusicText">Play OST</span>
+                        <div class="header-music-eq" id="headerMusicEq"><span></span><span></span><span></span></div>
+                    </button>
+                    <button class="nav-music-settings-btn" onclick="toggleTopAudioMenu(event)" title="Track Selection & Volume" style="background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.3); color: var(--accent-cyan); border-radius: 50%; width: 34px; height: 34px; margin-left: 0.4rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-sliders"></i>
+                    </button>
+
+                    <!-- Top Bar Dropdown Audio Menu -->
+                    <div class="top-audio-dropdown" id="topAudioDropdown" style="display: none; position: absolute; top: calc(100% + 14px); right: 0; width: 280px; background: rgba(10, 13, 20, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(0, 242, 254, 0.4); border-radius: var(--radius-md); padding: 1.1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.9); z-index: 10000;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <span style="font-family: 'Orbitron', monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 700;">
+                                <i class="fa-solid fa-certificate"></i> Hi-Res Studio OST
+                            </span>
+                            <span style="font-size: 0.7rem; color: var(--text-dim);" id="topAudioDuration">03:24</span>
+                        </div>
+                        <div style="font-family: 'Orbitron', sans-serif; font-size: 0.88rem; color: #fff; margin-bottom: 0.2rem;" id="topAudioTrackTitle">Nexus Singularity</div>
+                        <div style="font-size: 0.72rem; color: var(--accent-cyan); margin-bottom: 0.8rem;" id="topAudioGenre">Cyberpunk Synthwave</div>
+
+                        <!-- Progress Bar -->
+                        <div style="height: 5px; background: rgba(255,255,255,0.12); border-radius: 4px; cursor: pointer; margin-bottom: 0.8rem;" id="topProgressBarBg">
+                            <div style="height: 100%; width: 0%; background: var(--gradient-neon); border-radius: 4px;" id="topProgressBarFill"></div>
+                        </div>
+
+                        <!-- Controls -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;">
+                            <button class="music-btn" onclick="changeTrack(-1)" title="Previous Track"><i class="fa-solid fa-backward-step"></i></button>
+                            <button class="music-btn play-btn" onclick="toggleMusicPlayState()" title="Play/Pause"><i class="fa-solid fa-play" id="topDropdownPlayIcon"></i></button>
+                            <button class="music-btn" onclick="changeTrack(1)" title="Next Track"><i class="fa-solid fa-forward-step"></i></button>
+                            <button class="music-btn" id="topLoopBtn" onclick="toggleLoopMode()" title="Loop Track"><i class="fa-solid fa-repeat"></i></button>
+                            <button class="music-btn" id="topBassBtn" onclick="toggleBassBoost()" title="Bass Boost"><i class="fa-solid fa-bolt"></i></button>
+                        </div>
+
+                        <!-- Volume -->
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <i class="fa-solid fa-volume-high" style="color: var(--text-dim); font-size: 0.8rem;"></i>
+                            <input type="range" id="topVolSlider" min="0" max="1" step="0.05" value="0.5" style="width: 100%; accent-color: var(--accent-cyan);" />
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="login-page-wrapper">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="admin-lock-icon" style="overflow: hidden; padding: 0;">
+                        <img src="images/logo.png" alt="Nexus Forge Logo" width="70" height="70" style="width: 100%; height: 100%; object-fit: cover;" />
+                    </div>
+                    <h1 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: #fff;">Nexus <span class="text-gradient">Studio Portal</span></h1>
+                    <p>Sign in to send direct messages, test game demos, or access the developer dashboard.</p>
+                </div>
+
+                <!-- Tabs: Sign In vs Create Account -->
+                <div class="auth-tabs">
+                    <button class="auth-tab-btn active" id="tabLoginBtn">
+                        <i class="fa-solid fa-right-to-bracket"></i> Sign In
+                    </button>
+                    <button class="auth-tab-btn" id="tabRegisterBtn">
+                        <i class="fa-solid fa-user-plus"></i> Create Account
+                    </button>
+                </div>
+
+                <!-- Panel 1: Unified Sign In (Admin & Players) -->
+                <div class="auth-form-panel active" id="loginPanel">
+                    <div id="loginError" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #ef4444; padding: 0.8rem 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.88rem;"></div>
+
+                    <form id="unifiedLoginForm">
+                        <div class="form-group">
+                            <label for="loginIdentifier" class="form-label"><i class="fa-solid fa-envelope"></i> Email or Username</label>
+                            <input type="text" id="loginIdentifier" class="form-control" placeholder="Email address or username" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loginPassword" class="form-label"><i class="fa-solid fa-key"></i> Password</label>
+                            <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+                            <i class="fa-solid fa-right-to-bracket"></i> Sign In
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Panel 2: Register New Account -->
+                <div class="auth-form-panel" id="registerPanel">
+                    <div id="registerError" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #ef4444; padding: 0.8rem 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.88rem;"></div>
+
+                    <form id="unifiedRegisterForm">
+                        <div class="form-group">
+                            <label for="regName" class="form-label"><i class="fa-solid fa-user"></i> Your Full Name</label>
+                            <input type="text" id="regName" class="form-control" placeholder="e.g. John Miller" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regEmail" class="form-label"><i class="fa-solid fa-envelope"></i> Email Address</label>
+                            <input type="email" id="regEmail" class="form-control" placeholder="e.g. john@example.com" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regPassword" class="form-label"><i class="fa-solid fa-lock"></i> Create Password</label>
+                            <input type="password" id="regPassword" class="form-control" placeholder="Choose a password" required />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+                            <i class="fa-solid fa-user-plus"></i> Create Player Account
+                        </button>
+                    </form>
+                </div>
+
+                <div style="text-align: center; margin-top: 1.8rem;">
+                    <a href="index.html" style="color: var(--text-muted); font-size: 0.88rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                        <i class="fa-solid fa-arrow-left"></i> Return to Homepage
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container">
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-bottom" style="border: none; padding-top: 0;">
+                <p>&copy; 2026 Nexus Forge Studios. Developed by A. Rehman. All rights reserved.</p>
+                <p style="color: var(--accent-cyan);"><a href="index.html">Back to Home</a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Games Showcase & Player Ratings | Nexus Forge Studios</title>
+    <meta name="description" content="Browse our catalog of 3D games made with Unity and Blender. Rate games, read community reviews, and listen to the studio OST." />
+    <meta name="keywords" content="Cyber Vanguard, Shadows of Eldoria, Cosmic Drift, Unity Games, 3D Indie Games, Nexus Forge Studios" />
+    <meta name="author" content="A. Rehman" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nexusforge-pi.vercel.app/games" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nexus Forge Studios" />
+    <meta property="og:title" content="Games Showcase & Player Ratings | Nexus Forge Studios" />
+    <meta property="og:description" content="Browse our catalog of 3D games made with Unity and Blender. Rate games, read community reviews, and listen to the studio OST." />
+    <meta property="og:url" content="https://nexusforge-pi.vercel.app/games" />
+    <meta property="og:image" content="https://nexusforge-pi.vercel.app/images/hero.jpg" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Games Showcase & Player Ratings | Nexus Forge Studios" />
+    <meta name="twitter:description" content="Browse our catalog of 3D games made with Unity and Blender. Rate games, read community reviews, and listen to the studio OST." />
+    <meta name="twitter:image" content="https://nexusforge-pi.vercel.app/images/hero.jpg" />
+
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Website Favicon & Brand Icon -->
+    <link rel="icon" type="image/png" href="images/logo.png" />
+
+    <!-- Schema.org JSON-LD Structured Data for Game Collection -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Nexus Forge Game Catalog",
+      "url": "https://nexusforge-pi.vercel.app/games",
+      "description": "Catalog of 3D games developed by Nexus Forge Studios.",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "VideoGame",
+              "name": "Cyber Vanguard",
+              "description": "High-octane cyberpunk action RPG featuring fluid combat, neon environments, and responsive controls.",
+              "genre": "Cyberpunk Action RPG",
+              "gamePlatform": "PC / Windows",
+              "author": { "@type": "Organization", "name": "Nexus Forge Studios" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@type": "VideoGame",
+              "name": "Shadows of Eldoria",
+              "description": "Dark fantasy third-person combat adventure featuring souls-like boss battles and intricate magic spells.",
+              "genre": "Dark Fantasy Action",
+              "gamePlatform": "PC / Windows",
+              "author": { "@type": "Organization", "name": "Nexus Forge Studios" }
+            }
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "item": {
+              "@type": "VideoGame",
+              "name": "Cosmic Drift",
+              "description": "Hypersonic zero-gravity orbital racing game with custom anti-gravity hovercrafts and synthwave aesthetics.",
+              "genre": "Zero-G Sci-Fi Racing",
+              "gamePlatform": "PC / Windows",
+              "author": { "@type": "Organization", "name": "Nexus Forge Studios" }
+            }
+          }
+        ]
+      }
+    }
+    </script>
+
+    <!-- Supabase Cloud SDK -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="container nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="logo-icon">
+                    <img src="images/logo.png" alt="Nexus Forge Studios Logo" width="70" height="70" />
+                </div>
+                <span>NEXUS<span class="text-gradient">FORGE</span></span>
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="games.html" class="nav-link active">Our Games</a>
+                <a href="#ratingsSection" class="nav-link"><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Rate Games</a>
+                <a href="contact.html" class="nav-link">Contact Us</a>
+                <div class="nav-auth-container"></div>
+                <div class="nav-music-group" style="position: relative; display: flex; align-items: center;">
+                    <button class="nav-cta nav-music-btn" onclick="toggleMusicPlayState()" id="topBarMusicBtn" title="Toggle Studio OST Music" style="cursor: pointer; display: inline-flex; align-items: center; gap: 0.6rem; background: var(--gradient-card); border: 1px solid var(--accent-cyan); padding: 0.55rem 1.1rem; border-radius: var(--radius-full);">
+                        <i class="fa-solid fa-play" id="navMusicPlayIcon" style="color: var(--accent-cyan);"></i>
+                        <span id="navMusicText">Play OST</span>
+                        <div class="header-music-eq" id="headerMusicEq"><span></span><span></span><span></span></div>
+                    </button>
+                    <button class="nav-music-settings-btn" onclick="toggleTopAudioMenu(event)" title="Track Selection & Volume" style="background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.3); color: var(--accent-cyan); border-radius: 50%; width: 34px; height: 34px; margin-left: 0.4rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-sliders"></i>
+                    </button>
+
+                    <!-- Top Bar Dropdown Audio Menu -->
+                    <div class="top-audio-dropdown" id="topAudioDropdown" style="display: none; position: absolute; top: calc(100% + 14px); right: 0; width: 280px; background: rgba(10, 13, 20, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(0, 242, 254, 0.4); border-radius: var(--radius-md); padding: 1.1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.9); z-index: 10000;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; padding-bottom: 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <span style="font-family: 'Orbitron', monospace; font-size: 0.72rem; color: #f59e0b; font-weight: 700;">
+                                <i class="fa-solid fa-certificate"></i> Hi-Res Studio OST
+                            </span>
+                            <span style="font-size: 0.7rem; color: var(--text-dim);" id="topAudioDuration">03:24</span>
+                        </div>
+                        <div style="font-family: 'Orbitron', sans-serif; font-size: 0.88rem; color: #fff; margin-bottom: 0.2rem;" id="topAudioTrackTitle">Nexus Singularity</div>
+                        <div style="font-size: 0.72rem; color: var(--accent-cyan); margin-bottom: 0.8rem;" id="topAudioGenre">Cyberpunk Synthwave</div>
+
+                        <!-- Progress Bar -->
+                        <div style="height: 5px; background: rgba(255,255,255,0.12); border-radius: 4px; cursor: pointer; margin-bottom: 0.8rem;" id="topProgressBarBg">
+                            <div style="height: 100%; width: 0%; background: var(--gradient-neon); border-radius: 4px;" id="topProgressBarFill"></div>
+                        </div>
+
+                        <!-- Controls -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;">
+                            <button class="music-btn" onclick="changeTrack(-1)" title="Previous Track"><i class="fa-solid fa-backward-step"></i></button>
+                            <button class="music-btn play-btn" onclick="toggleMusicPlayState()" title="Play/Pause"><i class="fa-solid fa-play" id="topDropdownPlayIcon"></i></button>
+                            <button class="music-btn" onclick="changeTrack(1)" title="Next Track"><i class="fa-solid fa-forward-step"></i></button>
+                            <button class="music-btn" id="topLoopBtn" onclick="toggleLoopMode()" title="Loop Track"><i class="fa-solid fa-repeat"></i></button>
+                            <button class="music-btn" id="topBassBtn" onclick="toggleBassBoost()" title="Bass Boost"><i class="fa-solid fa-bolt"></i></button>
+                        </div>
+
+                        <!-- Volume -->
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <i class="fa-solid fa-volume-high" style="color: var(--text-dim); font-size: 0.8rem;"></i>
+                            <input type="range" id="topVolSlider" min="0" max="1" step="0.05" value="0.5" style="width: 100%; accent-color: var(--accent-cyan);" />
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Games Catalog Section -->
+        <section class="section-padding">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><i class="fa-solid fa-gamepad"></i> Official Game Library</span>
+                    <h1 class="hero-title" style="font-size: 2.4rem; margin-bottom: 1rem;">Explore Our <span class="text-gradient">3D Game Projects</span></h1>
+                    <p>
+                        Every project here is built natively with Unity Engine and customized 3D models sculpted in Blender. Click on any game card to preview full details, mechanics, and player reviews.
+                    </p>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="games-filter-bar">
+                    <button class="filter-btn active" data-filter="all">All Games</button>
+                    <button class="filter-btn" data-filter="scifi">Cyberpunk & Sci-Fi</button>
+                    <button class="filter-btn" data-filter="fantasy">Dark Fantasy & RPG</button>
+                </div>
+
+                <!-- Games Grid -->
+                <div class="games-grid">
+                    <!-- Populated dynamically via script.js -->
+                </div>
+
+                <!-- ========================================================= -->
+                <!-- ⭐ DEDICATED PLAYER RATINGS & REVIEWS HUB                 -->
+                <!-- ========================================================= -->
+                <div id="ratingsSection" style="margin-top: 6rem; scroll-margin-top: 120px;">
+                    <div class="section-header">
+                        <span class="section-tag"><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Community Feedback</span>
+                        <h2>Player Ratings & <span class="text-gradient">Game Reviews</span></h2>
+                        <p>Share your gameplay impressions, rate our Unity combat systems, and read what fellow gamers have to say.</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1.1fr 1.3fr; gap: 2.5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 2.5rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+                        
+                        <!-- Left: Submit Review Form -->
+                        <div id="pageReviewFormContainer">
+                            <h3 style="font-size: 1.4rem; color: #fff; margin-bottom: 0.5rem;">
+                                <i class="fa-solid fa-pen-nib" style="color: var(--accent-cyan);"></i> Rate a Game Title
+                            </h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                                Your rating is published immediately and visible to all players.
+                            </p>
+
+                            <form id="standaloneReviewForm">
+                                <div class="form-group">
+                                    <label for="reviewGameSelect" class="form-label">Select Game Title *</label>
+                                    <select id="reviewGameSelect" class="form-control" style="cursor: pointer;" required>
+                                        <!-- Injected via script.js -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Your Star Rating (Click Stars) *</label>
+                                    <div class="star-rating-input" id="pageStarRatingInput" style="font-size: 1.8rem;">
+                                        <span class="star-choice selected" data-value="1">★</span>
+                                        <span class="star-choice selected" data-value="2">★</span>
+                                        <span class="star-choice selected" data-value="3">★</span>
+                                        <span class="star-choice selected" data-value="4">★</span>
+                                        <span class="star-choice selected" data-value="5">★</span>
+                                    </div>
+                                    <input type="hidden" id="pageSelectedStarValue" value="5" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pageReviewComment" class="form-label">Your Review & Gameplay Feedback *</label>
+                                    <textarea id="pageReviewComment" class="form-control" style="min-height: 100px;" placeholder="Tell us what you liked about the mechanics, graphics, or level design..." required></textarea>
+                                </div>
+
+                                <div id="pageReviewAuthNote"></div>
+
+                                <button type="submit" class="btn btn-primary" id="pageReviewSubmitBtn" style="width: 100%;">
+                                    <i class="fa-solid fa-paper-plane"></i> Publish Game Review
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Right: Live Community Reviews Feed -->
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-color);">
+                                <h3 style="font-size: 1.2rem; color: #fff;">
+                                    <i class="fa-solid fa-comments" style="color: var(--accent-cyan);"></i> Live Community Reviews
+                                </h3>
+                                <span class="star-rating-badge" id="overallReviewsBadge">
+                                    <i class="fa-solid fa-star"></i> 5.0 / 5.0
+                                </span>
+                            </div>
+
+                            <div id="pageReviewsList" style="max-height: 480px; overflow-y: auto; padding-right: 0.5rem;">
+                                <!-- Populated dynamically via script.js -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Custom 3D Model Teaser -->
+                <div style="margin-top: 5rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 3rem; display: grid; grid-template-columns: 1fr 1.2fr; gap: 2.5rem; align-items: center;">
+                    <div>
+                        <span class="section-tag"><i class="fa-solid fa-cubes"></i> Custom 3D Assets</span>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Need Custom 3D Game Assets?</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                            All assets shown across these titles are modeled, textured, and rigged in Blender. We offer custom 3D modeling and environment design commissions.
+                        </p>
+                        <a href="contact.html" class="btn btn-primary">
+                            <i class="fa-solid fa-paper-plane"></i> Inquire About Assets
+                        </a>
+                    </div>
+                    <div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); padding: 1.2rem; border-radius: var(--radius-md); text-align: center;">
+                                <i class="fa-solid fa-robot" style="font-size: 1.8rem; color: var(--accent-cyan); margin-bottom: 0.5rem;"></i>
+                                <h4 style="font-size: 0.95rem;">Characters & Mechs</h4>
+                                <p style="color: var(--text-muted); font-size: 0.8rem;">Fully rigged with IK constraints</p>
+                            </div>
+                            <div style="background: rgba(157, 78, 221, 0.05); border: 1px solid rgba(157, 78, 221, 0.2); padding: 1.2rem; border-radius: var(--radius-md); text-align: center;">
+                                <i class="fa-solid fa-mountain-sun" style="font-size: 1.8rem; color: var(--accent-purple); margin-bottom: 0.5rem;"></i>
+                                <h4 style="font-size: 0.95rem;">Environment Kits</h4>
+                                <p style="color: var(--text-muted); font-size: 0.8rem;">Modular sci-fi & fantasy tiles</p>
+                            </div>
+                            <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); padding: 1.2rem; border-radius: var(--radius-md); text-align: center;">
+                                <i class="fa-solid fa-shield-halved" style="font-size: 1.8rem; color: #f59e0b; margin-bottom: 0.5rem;"></i>
+                                <h4 style="font-size: 0.95rem;">Weapons & Props</h4>
+                                <p style="color: var(--text-muted); font-size: 0.8rem;">PBR 2k/4k texturing & LODs</p>
+                            </div>
+                            <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); padding: 1.2rem; border-radius: var(--radius-md); text-align: center;">
+                                <i class="fa-solid fa-code" style="font-size: 1.8rem; color: #10b981; margin-bottom: 0.5rem;"></i>
+                                <h4 style="font-size: 0.95rem;">Unity Integration</h4>
+                                <p style="color: var(--text-muted); font-size: 0.8rem;">Prefabs & Animator controllers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Game Detail Modal Dialog -->
+    <div class="modal-overlay" id="gameModal" role="dialog" aria-modal="true">
+        <div class="modal-card">
+            <button class="modal-close" id="modalClose" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="modalImg" class="modal-image" src="" alt="Game preview" />
+            <div class="modal-content">
+                <h3 id="modalTitle" class="modal-title">Game Title</h3>
+                <p id="modalDesc" class="modal-desc">Game description text goes here.</p>
+                
+                <div class="modal-features" id="modalFeatures">
+                    <!-- Injected by script.js -->
+                </div>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="contact.html" class="btn btn-primary">
+                        <i class="fa-solid fa-envelope"></i> Request Demo / Inquire
+                    </a>
+                    <button class="btn btn-secondary" onclick="document.getElementById('gameModal').classList.remove('active'); document.body.style.overflow='';">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container">
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="brand-logo">
+                        <div class="logo-icon"><img src="images/logo.png" alt="Nexus Forge Logo" width="70" height="70" loading="lazy" /></div>
+                        <span>NEXUS<span class="text-gradient">FORGE</span></span>
+                    </a>
+                    <p>
+                        Independent game studio crafting cutting-edge 3D interactive experiences using Unity Engine and Blender 3D.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Developer</a></li>
+                        <li><a href="games.html">Games Catalog</a></li>
+                        <li><a href="games.html#ratingsSection">Rate & Reviews</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="login.html">Sign In / Portal</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Tech & Tools</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">Unity 3D Engine</a></li>
+                        <li><a href="about.html">Blender 3D Modeling</a></li>
+                        <li><a href="about.html">C# Game Systems</a></li>
+                        <li><a href="about.html">HLSL Shader Graph</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Account Portal</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem;">
+                        Sign in for developer and player access:
+                    </p>
+                    <a href="login.html" class="btn btn-sm btn-outline-cyan">
+                        <i class="fa-solid fa-user"></i> Portal Login
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Nexus Forge Studios. Developed by A. Rehman. All rights reserved.</p>
+                <p style="color: var(--accent-cyan);">Built with HTML5, CSS3 & JavaScript</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
